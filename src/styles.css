@@ -1,21 +1,31 @@
 /* Loop Mermaid Enhancer — styles
  *
- * We piggy-back on Loop's Fluent design tokens (var(--colorNeutralBackground*) etc.)
- * so the toolbar/modal blend into both light and dark themes without extra logic.
- * Fallback colors are provided in case Loop renames a token.
+ * Two palette strategies, depending on whether the element lives inside Loop's
+ * FluentProvider or not:
+ *
+ *  (A) Per-preview toolbar + SxS button live INSIDE the FluentProvider, where
+ *      Loop's design tokens (--colorNeutralBackground1, etc.) are defined.
+ *      We reference those tokens DIRECTLY at the rule (not pre-resolved into
+ *      :root!) so the browser evaluates them on the using element, which is
+ *      inside Fluent scope. Result: they follow Loop's theme automatically.
+ *
+ *      A previous version pre-resolved via :root { --lme-bg: var(--colorNeutralBackground1, #fff) }.
+ *      That evaluates AT :root where the Fluent token is undefined, so --lme-bg
+ *      computed to #fff and inherited as that literal — never following the
+ *      theme. Lesson: never indirect through :root for vars that Loop scopes.
+ *
+ *  (B) The fullscreen modal mounts on document.body, OUTSIDE FluentProvider.
+ *      Fluent vars don't reach it, so we ship an explicit two-palette setup
+ *      keyed by .lme-theme-light / .lme-theme-dark on the modal root.
+ *      JS picks the class based on theme.js detection.
  */
 
 :root {
-  --lme-bg: var(--colorNeutralBackground1, #ffffff);
-  --lme-bg-elevated: var(--colorNeutralBackground2, #fafafa);
-  --lme-bg-hover: var(--colorNeutralBackground1Hover, #f5f5f5);
-  --lme-fg: var(--colorNeutralForeground1, #242424);
-  --lme-fg-muted: var(--colorNeutralForeground3, #616161);
-  --lme-border: var(--colorNeutralStroke1, #d1d1d1);
-  --lme-accent: var(--colorBrandBackground, #0f6cbd);
   --lme-shadow: 0 4px 16px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .08);
   --lme-radius: 6px;
 }
+
+/* ===== (A) In-Fluent elements: refer to Loop tokens directly ===== */
 
 /* ---------- floating per-preview toolbar ----------
  * Hidden by default; revealed on hover/focus of the preview pane. When hidden
@@ -30,8 +40,8 @@
   display: flex;
   gap: 2px;
   padding: 3px;
-  background: var(--lme-bg-elevated);
-  border: 1px solid var(--lme-border);
+  background: var(--colorNeutralBackground2, #fafafa);
+  border: 1px solid var(--colorNeutralStroke1, #d1d1d1);
   border-radius: var(--lme-radius);
   box-shadow: var(--lme-shadow);
   opacity: 0;
@@ -49,7 +59,7 @@
   appearance: none;
   border: 0;
   background: transparent;
-  color: var(--lme-fg);
+  color: var(--colorNeutralForeground1, #242424);
   font: inherit;
   font-size: 14px;
   line-height: 1;
@@ -58,8 +68,8 @@
   cursor: pointer;
   min-width: 28px;
 }
-.lme-tb-btn:hover { background: var(--lme-bg-hover); }
-.lme-tb-btn--flash { color: var(--lme-accent); font-weight: 700; }
+.lme-tb-btn:hover { background: var(--colorNeutralBackground1Hover, #f5f5f5); }
+.lme-tb-btn--flash { color: var(--colorBrandBackground, #0f6cbd); font-weight: 700; }
 
 /* ---------- side-by-side toggle button ----------
  * Mounted into Loop's top toolbar (next to go-to-line / language selector).
@@ -69,9 +79,9 @@
  */
 .lme-sxs-btn {
   appearance: none;
-  border: 1px solid var(--lme-border);
-  background: var(--lme-bg-elevated);
-  color: var(--lme-fg);
+  border: 1px solid var(--colorNeutralStroke1, #d1d1d1);
+  background: var(--colorNeutralBackground2, #fafafa);
+  color: var(--colorNeutralForeground1, #242424);
   font-size: 12px;
   font-weight: 500;
   border-radius: 4px;
@@ -80,9 +90,32 @@
   cursor: pointer;
   white-space: nowrap;
 }
-.lme-sxs-btn:hover { background: var(--lme-bg-hover); }
+.lme-sxs-btn:hover { background: var(--colorNeutralBackground1Hover, #f5f5f5); }
 
-/* ---------- fullscreen modal ---------- */
+
+/* ===== (B) Modal: own palette via theme class ===== */
+
+.lme-modal.lme-theme-light {
+  --lme-bg: #ffffff;
+  --lme-bg-elevated: #fafafa;
+  --lme-bg-hover: #f0f0f0;
+  --lme-fg: #242424;
+  --lme-fg-muted: #616161;
+  --lme-border: #d1d1d1;
+  --lme-accent: #0f6cbd;
+  color-scheme: light;
+}
+.lme-modal.lme-theme-dark {
+  --lme-bg: #1f1f1f;
+  --lme-bg-elevated: #292929;
+  --lme-bg-hover: #333333;
+  --lme-fg: #ffffff;
+  --lme-fg-muted: #adadad;
+  --lme-border: #424242;
+  --lme-accent: #479ef5;
+  color-scheme: dark;
+}
+
 .lme-modal {
   position: fixed;
   inset: 0;
