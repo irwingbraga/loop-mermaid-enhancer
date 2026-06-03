@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Loop Mermaid Enhancer",
+  "version": "0.1.0",
+  "description": "Enhances Microsoft Loop's Mermaid diagram preview: fullscreen modal, real pan/zoom, copy/download as SVG or PNG, and a horizontal/vertical toggle for the edit-mode side-by-side view.",
+  "minimum_chrome_version": "110",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://loop.cloud.microsoft/*"],
+      "js": [
+        "vendor/svg-pan-zoom.min.js",
+        "src/theme.js",
+        "src/detect.js",
+        "src/export.js",
+        "src/modal.js",
+        "src/toolbar.js",
+        "src/sxs-toggle.js",
+        "src/content.js"
+      ],
+      "css": ["src/styles.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "permissions": ["clipboardWrite"]
+}

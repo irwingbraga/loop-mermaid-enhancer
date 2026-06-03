@@ -1,0 +1,148 @@
+/* Loop Mermaid Enhancer — styles
+ *
+ * We piggy-back on Loop's Fluent design tokens (var(--colorNeutralBackground*) etc.)
+ * so the toolbar/modal blend into both light and dark themes without extra logic.
+ * Fallback colors are provided in case Loop renames a token.
+ */
+
+:root {
+  --lme-bg: var(--colorNeutralBackground1, #ffffff);
+  --lme-bg-elevated: var(--colorNeutralBackground2, #fafafa);
+  --lme-bg-hover: var(--colorNeutralBackground1Hover, #f5f5f5);
+  --lme-fg: var(--colorNeutralForeground1, #242424);
+  --lme-fg-muted: var(--colorNeutralForeground3, #616161);
+  --lme-border: var(--colorNeutralStroke1, #d1d1d1);
+  --lme-accent: var(--colorBrandBackground, #0f6cbd);
+  --lme-shadow: 0 4px 16px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .08);
+  --lme-radius: 6px;
+}
+
+/* ---------- floating per-preview toolbar ----------
+ * Hidden by default; revealed on hover/focus of the preview pane. When hidden
+ * we also disable pointer-events so the invisible toolbar doesn't intercept
+ * pan/zoom drags that happen to start in its corner.
+ */
+.lme-toolbar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--lme-bg-elevated);
+  border: 1px solid var(--lme-border);
+  border-radius: var(--lme-radius);
+  box-shadow: var(--lme-shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s ease;
+}
+[role="region"][aria-label*="Mermaid generated"]:hover > .lme-toolbar,
+.lme-toolbar:hover,
+.lme-toolbar:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lme-tb-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--lme-fg);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 28px;
+}
+.lme-tb-btn:hover { background: var(--lme-bg-hover); }
+.lme-tb-btn--flash { color: var(--lme-accent); font-weight: 700; }
+
+/* ---------- side-by-side toggle button ----------
+ * Mounted into Loop's top toolbar (next to go-to-line / language selector).
+ * The actual flex-direction switch is done with inline `!important` styles in
+ * sxs-toggle.js — Griffel's atomic classes win against CSS classes, but lose
+ * against inline `important` values.
+ */
+.lme-sxs-btn {
+  appearance: none;
+  border: 1px solid var(--lme-border);
+  background: var(--lme-bg-elevated);
+  color: var(--lme-fg);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-left: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lme-sxs-btn:hover { background: var(--lme-bg-hover); }
+
+/* ---------- fullscreen modal ---------- */
+.lme-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;   /* above Loop's own dialogs */
+  color: var(--lme-fg);
+}
+.lme-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  backdrop-filter: blur(2px);
+}
+.lme-modal__shell {
+  position: absolute;
+  inset: 24px;
+  background: var(--lme-bg);
+  border: 1px solid var(--lme-border);
+  border-radius: 12px;
+  box-shadow: var(--lme-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.lme-modal__bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--lme-border);
+  background: var(--lme-bg-elevated);
+}
+.lme-modal__title { font-weight: 600; margin-right: 12px; }
+.lme-modal__spacer { flex: 1; }
+.lme-modal__div {
+  width: 1px; height: 18px;
+  background: var(--lme-border);
+  margin: 0 6px;
+}
+.lme-modal__stage {
+  flex: 1;
+  background:
+    linear-gradient(45deg, rgba(127,127,127,.06) 25%, transparent 25%) 0 0 / 16px 16px,
+    linear-gradient(-45deg, rgba(127,127,127,.06) 25%, transparent 25%) 0 0 / 16px 16px,
+    var(--lme-bg);
+  overflow: hidden;
+  cursor: grab;
+}
+.lme-modal__stage:active { cursor: grabbing; }
+.lme-modal__stage svg { width: 100%; height: 100%; display: block; }
+
+.lme-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--lme-fg);
+  font: inherit;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.lme-btn:hover { background: var(--lme-bg-hover); border-color: var(--lme-border); }
+.lme-btn--ghost { color: var(--lme-fg-muted); }
+.lme-btn--ghost:hover { color: var(--lme-fg); }
