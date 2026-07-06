@@ -20,6 +20,8 @@
         "src/modal.js",
         "src/toolbar.js",
         "src/sxs-toggle.js",
+        "src/exporter.js",
+        "src/export-button.js",
         "src/content.js"
       ],
       "css": ["src/styles.css"],
