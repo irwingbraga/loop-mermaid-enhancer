@@ -48,7 +48,7 @@
   pointer-events: none;
   transition: opacity .12s ease;
 }
-[role="region"][aria-label*="Mermaid generated"]:hover > .lme-toolbar,
+[aria-label*="Mermaid generated"]:hover > .lme-toolbar,
 .lme-toolbar:hover,
 .lme-toolbar:focus-within {
   opacity: 1;

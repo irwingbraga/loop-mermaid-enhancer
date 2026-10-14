@@ -3,7 +3,7 @@
  * Loop's editor is a custom react thing ("scriptor"). Stable hooks we rely on:
  *   - div.scriptor-component-code-block            — outer block (any language)
  *   - #language-selector[value="Mermaid"]          — identifies it as mermaid
- *   - [role="region"][aria-label*="Mermaid generated"]
+ *   - [aria-label*="Mermaid generated"]  (role was "region", now "graphics-document document"; do not rely on role)
  *                                                  — the preview pane region
  *   - div.unsafe-content                           — the transform wrapper Loop pans/zooms
  *   - iframe[id^="codePreviewIframe"]              — same-origin srcdoc iframe with the SVG
@@ -17,7 +17,7 @@
   const SEL = {
     codeBlock: 'div.scriptor-component-code-block',
     languageSelector: '#language-selector',
-    previewPane: '[role="region"][aria-label*="Mermaid generated"]',
+    previewPane: '[aria-label*="Mermaid generated"]',
     unsafeContent: 'div.unsafe-content',
     iframe: 'iframe[id^="codePreviewIframe"]',
     editorContainer: '[aria-label="Editor container"]',

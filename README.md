@@ -34,7 +34,7 @@ of June 2026):
 |---|---|
 | `div.scriptor-component-code-block` | Outer code block |
 | `#language-selector[value="Mermaid"]` | Identify Mermaid blocks |
-| `[role="region"][aria-label*="Mermaid generated"]` | Preview pane |
+| `[aria-label*="Mermaid generated"]` | Preview pane |
 | `div.unsafe-content` | Pan/zoom transform host |
 | `iframe[id^="codePreviewIframe"]` | Source SVG container |
 | `[aria-label="Editor container"]` / `[aria-label="Code editor"]` | Edit-mode editor |
