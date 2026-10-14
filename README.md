@@ -5,16 +5,32 @@ Microsoft Loop (`loop.cloud.microsoft`).
 
 ## What it adds
 
+### Mermaid diagrams
 - **Floating toolbar** on every Mermaid preview pane (appears on hover):
-  - `⛶` **Fullscreen** — large modal with proper pan + zoom (wheel, drag, keys).
-  - `{ }` **Copy SVG** — markup to clipboard.
-  - `📋` **Copy PNG** — PNG to clipboard (2× scale).
-  - `↓` **Download PNG** — `.png` file (2× scale).
+  - `⛶` **Fullscreen**: large modal with proper pan and zoom (wheel, drag, keys).
+  - `{ }` **Copy SVG**: markup to clipboard.
+  - `📋` **Copy PNG**: PNG to clipboard (2x scale).
+  - `↓` **Download PNG**: `.png` file (2x scale).
 - **Fullscreen modal** powered by [svg-pan-zoom]:
   - Scroll = zoom, drag = pan, `+ / - / 0 / R / Esc` keyboard shortcuts.
   - Copy / Download SVG and PNG from the modal too.
-- **H ↔ V split toggle** while editing — flips the editor/preview layout between
+- **H/V split toggle** while editing: flips the editor/preview layout between
   side-by-side (Loop's default) and stacked.
+
+### Markdown export
+- **Page export**: a small toolbar at the bottom right of every Loop page with
+  **Copy .md** and **Download .md** (shortcut: `Cmd/Ctrl+Shift+M` to copy).
+  Handles headings, lists, tables, code blocks, links and inline formatting.
+- **Subtree export**: open the `...` ("More Page options") menu on any page in
+  the sidebar and choose **Download subtree as Markdown**. The extension expands
+  the branch, visits each nested page, and downloads a single `.zip` whose
+  folders mirror the page tree. A progress panel with a Cancel button is shown,
+  pages that fail to load are listed in `_export-errors.txt`, and you are
+  returned to the page you started on.
+
+### Other
+- Toolbar, modal and export buttons follow Loop's light/dark theme.
+- Custom extension icon (source in `icons/icon.svg`).
 
 ## Why these design choices
 
@@ -55,7 +71,7 @@ they change with every release.
 ```
 loop-mermaid-enhancer/
 ├── manifest.json
-├── icons/                  # 16/48/128 placeholder PNGs (replace anytime)
+├── icons/                  # icon.svg source + 16/48/128 PNGs
 ├── vendor/
 │   └── svg-pan-zoom.min.js # ~30 KB
 └── src/
@@ -65,6 +81,10 @@ loop-mermaid-enhancer/
     ├── modal.js            # Fullscreen viewer
     ├── toolbar.js          # Per-preview floating toolbar
     ├── sxs-toggle.js       # Edit-mode split direction toggle
+    ├── exporter.js         # Loop page DOM -> Markdown
+    ├── export-button.js    # Bottom-right Copy/Download .md toolbar
+    ├── subtree-export.js   # Sidebar menu item: page tree -> .zip of .md
+    ├── zip.js              # Minimal store-only zip writer
     ├── content.js          # Orchestrator (MutationObserver)
     └── styles.css
 ```
@@ -89,6 +109,7 @@ selector. Check the table above against current DOM and update `src/detect.js`.
 - The H↔V toggle changes `flex-direction` on the split parent; very long source
   files in vertical mode may need an explicit `min-height` per pane — adjust in
   `styles.css` if needed.
-- Icons are placeholder glyphs; drop in real PNGs whenever.
+- Subtree export navigates through each page, so it takes a few seconds per
+  page and depends on the sidebar `role="tree"` markup and the page menu.
 
 [svg-pan-zoom]: https://github.com/bumbu/svg-pan-zoom
