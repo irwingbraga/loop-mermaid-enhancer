@@ -215,3 +215,23 @@
 }
 .lme-md-btn:hover { background: var(--colorNeutralBackground1Hover, #f5f5f5); }
 .lme-md-btn--flash { color: var(--colorBrandBackground, #0f6cbd); font-weight: 700; }
+
+/* ---- Subtree export progress panel ---- */
+#lme-subtree-panel {
+  position: fixed;
+  bottom: 60px;
+  right: 16px;
+  z-index: 2147482900;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 420px;
+  background: var(--colorNeutralBackground2, #fafafa);
+  color: var(--colorNeutralForeground1, #242424);
+  border: 1px solid var(--colorNeutralStroke1, #d1d1d1);
+  border-radius: var(--lme-radius);
+  box-shadow: var(--lme-shadow);
+  padding: 6px 6px 6px 12px;
+  font-size: 12px;
+}
+.lme-sub__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
